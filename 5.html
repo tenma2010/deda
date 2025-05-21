@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nosso Amor em Pixels</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #fff0f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px 0;
+            background: linear-gradient(135deg, #ff8a9e, #ff5c8d);
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(255, 105, 180, 0.3);
+        }
+
+        header h1 {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        header p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .qr-section {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 40px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .qr-section h2 {
+            color: #ff5c8d;
+            margin-bottom: 20px;
+        }
+
+        #qrcode {
+            margin: 20px auto;
+            width: 200px;
+            height: 200px;
+        }
+
+        .download-btn {
+            display: inline-block;
+            background: #ff5c8d;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .download-btn:hover {
+            background: #ff3377;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 105, 180, 0.4);
+        }
+
+        .gallery {
+            margin-top: 40px;
+        }
+
+        .gallery h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #ff5c8d;
+        }
+
+        .gallery-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .gallery-item {
+            position: relative;
+            height: 300px;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .gallery-item .caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 92, 141, 0.8);
+            color: white;
+            padding: 10px;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover .caption {
+            transform: translateY(0);
+        }
+
+        .quote-section {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            margin: 40px 0;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .quote {
+            font-size: 1.5rem;
+            font-style: italic;
+            color: #ff5c8d;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .file-upload {
+            margin-top: 40px;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .file-upload h2 {
+            color: #ff5c8d;
+            margin-bottom: 20px;
+        }
+
+        .upload-btn-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            margin: 20px 0;
+        }
+
+        .btn {
+            border: 2px solid #ff5c8d;
+            color: #ff5c8d;
+            background-color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .upload-btn-wrapper input[type=file] {
+            font-size: 100px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .preview-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .preview-item {
+            position: relative;
+            height: 150px;
+            overflow: hidden;
+            border-radius: 5px;
+        }
+
+        .preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .heart {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23ff5c8d"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>') no-repeat;
+            opacity: 0;
+            animation: fall 10s linear infinite;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding: 20px;
+            color: #ff5c8d;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+
+            .gallery-container {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hearts" id="hearts"></div>
+    
+    <div class="container">
+        <header>
+            <h1>Nosso Amor em Pixels</h1>
+            <p>Um lugar especial para guardar e compartilhar nossos momentos mais preciosos</p>
+        </header>
+
+        <section class="qr-section">
+            <h2>Compartilhe Nosso Amor</h2>
+            <p>Escaneie este QR code para compartilhar nossa página de amor</p>
+            <div id="qrcode"></div>
+            <a href="#" id="downloadQR" class="download-btn">Baixar QR Code</a>
+        </section>
+
+        <section class="gallery">
+            <h2>Nossa Galeria de Momentos</h2>
+            <div class="gallery-container">
+                <div class="gallery-item">
+                    <img src="/api/placeholder/400/320" alt="Momento Romântico 1">
+                    <div class="caption">Nosso primeiro encontro</div>
+                </div>
+                <div class="gallery-item">
+                    <img src="/api/placeholder/400/320" alt="Momento Romântico 2">
+                    <div class="caption">Pôr do sol na praia</div>
+                </div>
+                <div class="gallery-item">
+                    <img src="/api/placeholder/400/320" alt="Momento Romântico 3">
+                    <div class="caption">Jantar especial de aniversário</div>
+                </div>
+                <div class="gallery-item">
+                    <img src="/api/placeholder/400/320" alt="Momento Romântico 4">
+                    <div class="caption">Nossa primeira viagem juntos</div>
+                </div>
+                <div class="gallery-item">
+                    <img src="/api/placeholder/400/320" alt="Momento Romântico 5">
+                    <div class="caption">Dia dos namorados</div>
+                </div>
+                <div class="gallery-item">
+                    <img src="/api/placeholder/400/320" alt="Momento Romântico 6">
+                    <div class="caption">Nosso lugar especial</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="quote-section">
+            <div class="quote">
+                "Cada momento contigo é como uma página de um livro que nunca quero parar de ler."
+            </div>
+        </section>
+
+        <section class="file-upload">
+            <h2>Adicione Suas Memórias</h2>
+            <p>Carregue fotos especiais para nossa galeria de amor</p>
+            <div class="upload-btn-wrapper">
+                <button class="btn">Escolher Fotos</button>
+                <input type="file" id="fileUpload" multiple accept="image/*">
+            </div>
+            <div class="preview-container" id="previewContainer"></div>
+        </section>
+
+        <footer>
+            <p>❤️ Criado com Amor ❤️</p>
+        </footer>
+    </div>
+
+    <script>
+        // Gerar QR Code
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentUrl = window.location.href;
+            const qrcode = new QRCode(document.getElementById("qrcode"), {
+                text: currentUrl,
+                width: 200,
+                height: 200,
+                colorDark: "#ff5c8d",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+
+            // Baixar QR Code
+            document.getElementById('downloadQR').addEventListener('click', function(e) {
+                e.preventDefault();
+                const canvas = document.querySelector('#qrcode canvas');
+                const link = document.createElement('a');
+                link.download = 'nosso-amor-qrcode.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+
+            // Upload de imagens
+            document.getElementById('fileUpload').addEventListener('change', function(e) {
+                const previewContainer = document.getElementById('previewContainer');
+                previewContainer.innerHTML = '';
+                
+                const files = e.target.files;
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+                    if (file.type.match('image.*')) {
+                        const reader = new FileReader();
+                        
+                        reader.onload = function(e) {
+                            const previewItem = document.createElement('div');
+                            previewItem.className = 'preview-item';
+                            
+                            const img = document.createElement('img');
+                            img.src = e.target.result;
+                            
+                            previewItem.appendChild(img);
+                            previewContainer.appendChild(previewItem);
+                        }
+                        
+                        reader.readAsDataURL(file);
+                    }
+                }
+            });
+
+            // Criar corações flutuantes
+            createHearts();
+        });
+
+        // Função para criar corações flutuantes
+        function createHearts() {
+            const heartsContainer = document.getElementById('hearts');
+            const numberOfHearts = 20;
+            
+            for (let i = 0; i < numberOfHearts; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.style.left = `${Math.random() * 100}%`;
+                heart.style.animationDelay = `${Math.random() * 10}s`;
+                heart.style.opacity = Math.random() * 0.5 + 0.5;
+                heart.style.fontSize = `${Math.random() * 10 + 10}px`;
+                heartsContainer.appendChild(heart);
+            }
+        }
+    </script>
+</body>
+</html>
